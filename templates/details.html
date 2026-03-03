@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ medicine.name }} Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body style="background: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+
+<div class="card">
+    <h2 style="color: #00d2ff;">{{ medicine.name }}</h2>
+
+    <img src="{{ url_for('static', filename=medicine.image) }}" width="200" style="border-radius: 15px; margin: 15px 0;" onerror="this.src='/static/images/default.jpg'">
+
+    <div style="text-align: left; line-height: 1.6;">
+        <p><strong>When to use:</strong> {{ medicine.when_to_use }}</p>
+        <p><strong>How to use:</strong> {{ medicine.how_to_use }}</p>
+        <p><strong>Age limit:</strong> {{ medicine.age_limit }}</p>
+        <p style="color: #ff4d4d;"><strong>side effects:</strong> {{ medicine.side_effects }}</p>
+    </div>
+
+    <div style="margin-top: 20px; background: #222; padding: 15px; border-radius: 10px;">
+    <p style="font-size: 0.8rem; margin: 0 0 5px 0; color: #00d2ff;">🔊 AI Audio Guide</p>
+    
+    <audio id="medVoice" controls autoplay style="width: 100%;">
+        <source src="{{ url_for('static', filename=audio_file) }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+   <script>
+let availableVoices = [];
+
+function loadVoices() {
+    availableVoices = window.speechSynthesis.getVoices();
+}
+window.speechSynthesis.onvoiceschanged = loadVoices;
+
+function readDetails() {
+        window.speechSynthesis.cancel();
+
+    
+    const name = "{{ medicine.name }}";
+    const usage = "{{ medicine.how_to_use }}";
+    const side = "{{ medicine.side_effects }}";
+
+    const speech = new SpeechSynthesisUtterance();
+    speech.text = `Medicine Name: ${name}. How to use: ${usage}. Side effects include ${side}.`;
+    
+        speech.rate = 0.9; 
+    speech.pitch = 1;
+    
+    
+    const voice = availableVoices.find(v => v.lang.includes('en'));
+    if (voice) speech.voice = voice;
+
+    window.speechSynthesis.speak(speech);
+}
+
+
+window.onload = function() {
+    loadVoices();
+    
+    setTimeout(() => {
+        readDetails();
+    }, 1000); 
+};
+</script>
+</div>
+</div>
+
+</body>
+</html>

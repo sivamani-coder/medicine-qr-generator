@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="bg-container"></div>
+    <div style="display: flex; height: 100vh; justify-content: center; align-items: center;">
+        <div class="glass-panel">
+            <h1>MedScan AI</h1>
+            <p>Smart Medicine Information System</p>
+            <form action="/generate" method="POST">
+                <input type="text" name="medicine_name" class="search-input" placeholder="Search for a medicine..." required>
+                <br>
+                <button type="submit" class="btn-glow">GENERATE QR</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const imgs = ["{{ url_for('static', filename='images/Amlodipine.jpg') }}",
+            "{{ url_for('static', filename='images/Aspirin.jpg') }}",
+            "{{ url_for('static', filename='images/Atorvastatin.jpg') }}",
+            "{{ url_for('static', filename='images/Cetirizine.jpg') }}",
+            "{{ url_for('static', filename='images/Ibuprofen.jpg') }}",
+            "{{ url_for('static', filename='images/Metformin.jpg') }}",
+            "{{ url_for('static', filename='images/Omeprazole.jpg') }}",
+            "{{ url_for('static', filename='images/Pantoprazole.jpg') }}",
+            "{{ url_for('static', filename='images/paracetamol.jpg') }}",
+            "{{ url_for('static', filename='images/Vitamin D3.jpg') }}"
+];
+        let idx = 0;
+        const bg = document.getElementById('bg-container');
+        function change() {
+            bg.style.backgroundImage = `url('${imgs[idx]}')`;
+            idx = (idx + 1) % imgs.length;
+        }
+        change(); setInterval(change, 10000);
+    </script>
+</body>
+</html>

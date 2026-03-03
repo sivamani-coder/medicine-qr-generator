@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body style="background: #121212; display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <div class="glass-panel">
+        <h2 style="color: #00d2ff;">QR Code Generated</h2>
+        <p>Medicine: <strong>{{ med_name }}</strong></p>
+        <div style="background: white; padding: 15px; border-radius: 15px; margin: 20px 0;">
+            <img src="{{ qr_path }}" style="width: 250px;">
+        </div>
+        <button onclick="window.location.href='/'" class="btn-glow">Generate New</button>
+    </div>
+</body>
+</html>

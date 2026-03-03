@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="result-body">
+
+    <div class="detail-card glass scale-up">
+        
+        <img src="/static/images/{{ medicine.name }}.jpg"
+             class="med-img"
+             onerror="this.src='/static/images/default.jpg'">
+
+        <h2>{{ medicine.name }}</h2>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>How to use:</strong>
+                <p id="usage">{{ medicine.how_to_use }}</p>
+            </div>
+
+            <div class="info-item">
+                <strong>When to use:</strong>
+                <p id="when">{{ medicine.when_to_use }}</p>
+            </div>
+
+            <div class="info-item">
+                <strong>Age Limit:</strong>
+                <p id="age">{{ medicine.age_limit }}</p>
+            </div>
+
+            <div class="info-item danger">
+                <strong>Side Effects:</strong>
+                <p id="side">{{ medicine.side_effects }}</p>
+            </div>
+        </div>
+
+        <button onclick="readDetails()" class="voice-btn">
+            🔊 Listen to AI Assistant
+        </button>
+
+    </div>
+
+<script>
+
+let availableVoices = [];
+
+function loadVoices() {
+    availableVoices = window.speechSynthesis.getVoices();
+}
+
+
+window.speechSynthesis.onvoiceschanged = loadVoices;
+
+function readDetails() {
+
+    if (!('speechSynthesis' in window)) {
+        alert("Speech synthesis not supported in this browser.");
+        return;
+    }
+
+    
+    const name = document.querySelector("h2").innerText;
+    const usage = document.getElementById("usage").innerText;
+    const when = document.getElementById("when").innerText;
+    const age = document.getElementById("age").innerText;
+    const side = document.getElementById("side").innerText;
+
+    const fullText =
+        "Medicine name: " + name +
+        ". When to use: " + when +
+        ". How to use: " + usage +
+        ". Age limit: " + age +
+        ". Warning. Side effects include: " + side;
+
+    const speech = new SpeechSynthesisUtterance(fullText);
+
+    speech.volume = 1;
+    speech.rate = 0.9;
+    speech.pitch = 1;
+
+    
+    if (availableVoices.length > 0) {
+        const englishVoice = availableVoices.find(voice => voice.lang.includes("en"));
+        if (englishVoice) {
+            speech.voice = englishVoice;
+        }
+    }
+
+    
+    window.speechSynthesis.cancel();
+
+    
+    window.speechSynthesis.speak(speech);
+}
+
+
+loadVoices();
+
+</script>
+</body>
+</html>
